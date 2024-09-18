@@ -39,9 +39,22 @@ public class CS_Controller : MonoBehaviour
         return mNowPhese;
     }
 
+    //フェーズ切り替え
+    public void ChangePhase(PACHINKO_PHESE _nextPhese)
+    {
+        mPrevPhese = mNowPhese;
+        mNowPhese = _nextPhese;
+    }
+
     //保留玉を増やす
     public void AddStock()
     {
         mStock++;
+    }
+
+    //保留玉を取得する
+    public int GetStock()
+    {
+        return mStock;
     }
 }
