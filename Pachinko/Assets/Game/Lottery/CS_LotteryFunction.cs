@@ -15,4 +15,10 @@ public class CS_LotteryFunction : MonoBehaviour
     {
         
     }
+
+    public static void Lot()
+    {
+
+
+    }
 }
