@@ -28,8 +28,46 @@ public class CS_LotteryFunction : MonoBehaviour
     //ジェネリック関数で任意のEnum型からランダムに値を抽選
     public static T LotDirecting<T>() where T : Enum
     {
-        T[] enumValues = (T[])Enum.GetValues(typeof(T)); // Enumの全ての値を配列で取得
-        int randomIndex = UnityEngine.Random.Range(0, enumValues.Length); // ランダムインデックス
-        return enumValues[randomIndex]; // ランダムに選ばれたEnumの値を返す
+        T[] enumValues = (T[])Enum.GetValues(typeof(T)); //Enumの全ての値を配列で取得
+        int randomIndex = UnityEngine.Random.Range(0, enumValues.Length); //ランダムインデックス
+        return enumValues[randomIndex]; //ランダムに選ばれたEnumの値を返す
+    }
+
+    public static T LotDirecting<T>(List<float> _probabilities) where T : Enum
+    {
+        // Enumの全ての値を配列で取得
+        T[] enumValues = (T[])Enum.GetValues(typeof(T));
+
+        // 確率の数とEnumの数が一致しているか確認
+        if (_probabilities.Count != enumValues.Length)
+        {
+            Debug.LogError("確率の数とEnumの数が一致していません。");
+            return default(T);
+        }
+
+        // 確率の合計を取得
+        float totalProbability = 0f;
+        foreach (float probability in _probabilities)
+        {
+            totalProbability += probability;
+        }
+        // ランダムな値を生成 (0～の範囲)
+        float randomValue = UnityEngine.Random.Range(0f, totalProbability);
+        float cumulativeProbability = 0f;
+
+        //Debug.Log("randomValue" + randomValue);
+
+        //確率に従って抽選
+        for (int i = 0; i < _probabilities.Count; i++)
+        {
+            cumulativeProbability += _probabilities[i];
+            if (randomValue < cumulativeProbability)
+            {
+                return enumValues[i]; // 確率に従って選ばれたEnumの値を返す
+            }
+        }
+
+        // フォールバックとして、最後のEnum値を返す
+        return default(T);
     }
 }
