@@ -52,6 +52,11 @@ public class CS_Controller : MonoBehaviour
         mStock++;
     }
 
+    public void UseStock()
+    {
+        mStock--;
+    }
+
     //•Û—¯‹Ê‚ðŽæ“¾‚·‚é
     public int GetStock()
     {
