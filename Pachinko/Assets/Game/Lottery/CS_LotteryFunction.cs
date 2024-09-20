@@ -26,14 +26,14 @@ public class CS_LotteryFunction : MonoBehaviour
 
     //演出抽選
     //ジェネリック関数で任意のEnum型からランダムに値を抽選
-    public static T LotDirecting<T>() where T : Enum
+    public static T LotPerformance<T>() where T : Enum
     {
         T[] enumValues = (T[])Enum.GetValues(typeof(T)); //Enumの全ての値を配列で取得
         int randomIndex = UnityEngine.Random.Range(0, enumValues.Length); //ランダムインデックス
         return enumValues[randomIndex]; //ランダムに選ばれたEnumの値を返す
     }
 
-    public static T LotDirecting<T>(List<float> _probabilities) where T : Enum
+    public static T LotPerformance<T>(List<float> _probabilities) where T : Enum
     {
         // Enumの全ての値を配列で取得
         T[] enumValues = (T[])Enum.GetValues(typeof(T));
@@ -45,7 +45,7 @@ public class CS_LotteryFunction : MonoBehaviour
             return default(T);
         }
 
-        // 確率の合計を取得
+        //確率の合算値を設定
         float totalProbability = 0f;
         foreach (float probability in _probabilities)
         {
@@ -53,6 +53,8 @@ public class CS_LotteryFunction : MonoBehaviour
         }
         // ランダムな値を生成 (0～の範囲)
         float randomValue = UnityEngine.Random.Range(0f, totalProbability);
+
+
         float cumulativeProbability = 0f;
 
         //Debug.Log("randomValue" + randomValue);
