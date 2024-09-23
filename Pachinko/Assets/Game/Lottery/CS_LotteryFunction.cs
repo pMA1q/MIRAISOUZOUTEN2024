@@ -9,9 +9,8 @@ using System;
 
 public class CS_LotteryFunction : MonoBehaviour
 {
-    
     // 確率抽選関数: 分母を引数にとり、1/分母の確率で当たりを返す
-    public static　bool LotMain(int _denominator)
+    public static　bool LotJackpot(int _denominator)
     {
         if (_denominator <= 0)
         {
@@ -24,8 +23,42 @@ public class CS_LotteryFunction : MonoBehaviour
         return randomValue == 0;
     }
 
-    //演出抽選
-    //ジェネリック関数で任意のEnum型からランダムに値を抽選
+  
+    public static int LotPerformance(List<float> _probabilities)
+    {
+        //確率の合計を取得
+        float totalProbability = 0f;
+        foreach (float probability in _probabilities)
+        {
+            totalProbability += probability;
+        }
+
+        //totalProbability が0のときはエラーを返す
+        if (totalProbability == 0f)
+        {
+            Debug.LogError("確率の合計が0です。");
+            return -1; // エラーとして -1 を返す
+        }
+
+        //ランダムな値を生成 (0～totalProbabilityの範囲)
+        float randomValue = UnityEngine.Random.Range(0f, totalProbability);
+        float cumulativeProbability = 0f;
+
+        //確率に従って抽選
+        for (int i = 0; i < _probabilities.Count; i++)
+        {
+            cumulativeProbability += _probabilities[i];
+            if (randomValue < cumulativeProbability)
+            {
+                return i; // 確率に従って選ばれたリストのインデックスを返す
+            }
+        }
+
+        //フォールバックとして、最後のインデックスを返す
+        return _probabilities.Count - 1;
+    }
+
+/*
     public static T LotPerformance<T>() where T : Enum
     {
         T[] enumValues = (T[])Enum.GetValues(typeof(T)); //Enumの全ての値を配列で取得
@@ -72,4 +105,6 @@ public class CS_LotteryFunction : MonoBehaviour
         // フォールバックとして、最後のEnum値を返す
         return default(T);
     }
+*/
+
 }

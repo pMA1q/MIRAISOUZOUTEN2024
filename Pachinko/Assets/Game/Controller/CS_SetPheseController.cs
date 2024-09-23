@@ -5,26 +5,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CS_SetPheseController : MonoBehaviour
 {
-    //準備フェーズの演出を列挙
-    public enum SET_PERFORMANCE
-    {
-        VALUE1,
-        VALUE2,
-        VALUE3,
-    }
+   
 
     //各Enumに対する確率
     [SerializeField]
-    List<float> mProbabilities = new List<float> { 50.0f/200.0f, 150f/200f, 20f/200f };
+    CS_TestProbabilityStatus mProbabilityStatus;
+    List<float> mProbabilities = new List<float>();
 
     //演出が終わったか否か
-    private bool mPerformanceFinish = false;
+    private bool mPerformanceFinish = true;
     
+
+
 //-------------------------------イベントハンドラ----------------
-    public delegate void Performance(SET_PERFORMANCE _performance);
+    public delegate void Performance(int _performance);
 
     //演出を流すトリガーイベント
     public static event Performance OnPlayPerformance;
@@ -37,35 +35,37 @@ public class CS_SetPheseController : MonoBehaviour
     void Start()
     {
         //各確率を%に直す
-        for (int i = 0; i < mProbabilities.Count; i++)
+        for (int i = 0; i < mProbabilityStatus.performances.Count; i++)
         {
-            mProbabilities[i] *= 100f;
-            Debug.Log((SET_PERFORMANCE)i + "の確率" + mProbabilities[i] + "%");
+            mProbabilities.Add(mProbabilityStatus.performances[i].value);
+            Debug.Log(mProbabilityStatus.performances[i].name + "の確率" + mProbabilities[i] + "%");
         }
     }
 
     // Update is called once per frame
     void Update()
     {
+        //CheckLottery();
         //演出が終わっていないなら終了
         if (!mPerformanceFinish) { return; }
 
         //保留玉を使用
 
         //演出抽選
-        SET_PERFORMANCE randomNumber = CS_LotteryFunction.LotPerformance<SET_PERFORMANCE>(mProbabilities);
+        int randomNumber = CS_LotteryFunction.LotPerformance(mProbabilities);
         mPerformanceFinish = false;
         //演出開始トリガーをON
         OnPlayPerformance(randomNumber);
-
     }
+
+
 
     private void CheckLottery()
     {
         if (debugCount < 10000)
         {
-            SET_PERFORMANCE random = CS_LotteryFunction.LotPerformance<SET_PERFORMANCE>(mProbabilities);
-            Debug.Log("ランダムに選ばれた値: " + random);
+            int randomNumber = CS_LotteryFunction.LotPerformance(mProbabilities);
+            Debug.Log("ランダムに選ばれた演出: " + mProbabilityStatus.performances[randomNumber].name);
             debugCount++;
 
             if (debugCount >= 10000)
@@ -80,5 +80,22 @@ public class CS_SetPheseController : MonoBehaviour
     public void PerformanceFinish()
     {
         mPerformanceFinish = true;
+    }
+
+    //登録されているイベントハンドラをすべて削除
+    public static void RemoveAllHandlers()
+    {
+        // OnPlayPerformance に何かしらのハンドラが登録されている場合
+        if (OnPlayPerformance != null)
+        {
+            // OnPlayPerformance に登録されている全てのハンドラを取得
+            Delegate[] handlers = OnPlayPerformance.GetInvocationList();
+
+            // すべてのハンドラを解除
+            foreach (Delegate handler in handlers)
+            {
+                OnPlayPerformance -= (Performance)handler;
+            }
+        }
     }
 }
