@@ -1,16 +1,17 @@
 //---------------------------------
-//準備フェーズ司令塔
-//担当者：中島
+//ボスフェーズ
+//担当者：野崎
 //---------------------------------
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Diagnostics;
 
 public class CS_SetPheseController : MonoBehaviour
 {
-   
+
     [SerializeField]
     CS_TestProbabilityStatus mProbabilityStatus;
     List<float> mProbabilities = new List<float>();
@@ -20,12 +21,12 @@ public class CS_SetPheseController : MonoBehaviour
 
 
 
- //-----------------------イベントハンドラ-----------------------
+    //-----------------------イベントハンドラ-----------------------
     public delegate void Performance(int _performance);
 
     //演出を流すトリガーイベント
     public static event Performance OnPlayPerformance;
-//-------------------------------------------------------------
+    //-------------------------------------------------------------
 
     int debugCount = 0;
 
