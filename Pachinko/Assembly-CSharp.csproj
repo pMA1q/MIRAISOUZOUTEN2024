@@ -61,6 +61,7 @@
     <Compile Include="Assets\Bokudayo\Script\ExplosionSample.cs" />
     <Compile Include="Assets\Game\Core\CS_RenderTexture.cs" />
     <Compile Include="Assets\Bokudayo\Script\Move.cs" />
+    <Compile Include="Assets\Bokudayo\Script\Rotate.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
