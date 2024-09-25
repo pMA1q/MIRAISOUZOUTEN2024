@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;  // LINQを使うために必要
 
 public class CS_SetPheseController : MonoBehaviour
 {
@@ -25,7 +26,10 @@ public class CS_SetPheseController : MonoBehaviour
 
     //演出を流すトリガーイベント
     public static event Performance OnPlayPerformance;
-//-------------------------------------------------------------
+    //-------------------------------------------------------------
+
+
+   
 
     int debugCount = 0;
 
@@ -33,7 +37,7 @@ public class CS_SetPheseController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //
+        //パフォーマンスリストから確率をコピー
         for (int i = 0; i < mProbabilityStatus.performances.Count; i++)
         {
             mProbabilities.Add(mProbabilityStatus.performances[i].value);
@@ -52,7 +56,7 @@ public class CS_SetPheseController : MonoBehaviour
 
         //演出抽選
         int randomNumber = CS_LotteryFunction.LotPerformance(mProbabilities);
-        mPerformanceFinish = false;
+        mPerformanceFinish = false;//演出終了フラグをfalse
         //演出開始トリガーをON
         OnPlayPerformance(randomNumber);
     }
@@ -73,6 +77,20 @@ public class CS_SetPheseController : MonoBehaviour
             }
         }
 
+    }
+
+    //シーン内にあるオブジェクトからCS_SetPheseControllerを見つけて返す
+    public static CS_SetPheseController GetCtrl()
+    {
+        //シーン内の全てのGameObjectを取得して、名前にmPrefabNameを含むオブジェクトを検索
+        GameObject targetObject = FindObjectsOfType<GameObject>()
+            .FirstOrDefault(obj => obj.name.Contains("SetPhaseCtrl"));
+        if (targetObject != null)
+        {
+            Debug.Log("準備フェーズ司令塔が見つかった");
+            return targetObject.GetComponent<CS_SetPheseController>();
+        }
+        return null;
     }
 
     //演出終了関数
