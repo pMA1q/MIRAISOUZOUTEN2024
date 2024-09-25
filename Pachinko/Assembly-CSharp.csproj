@@ -67,6 +67,7 @@
     <Compile Include="Assets\Game\Core\CS_RenderTexture.cs" />
     <Compile Include="Assets\Bokudayo\Script\Move.cs" />
     <Compile Include="Assets\Game\Lottery\CS_LotteryFunction.cs" />
+    <Compile Include="Assets\Practice\CS_Spawner_N.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

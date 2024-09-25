@@ -20,7 +20,6 @@ public class CS_SetPheseController : MonoBehaviour
     private bool mPerformanceFinish = true;
     
 
-
 //-------------------------------イベントハンドラ----------------
     public delegate void Performance(int _performance);
 
@@ -29,7 +28,6 @@ public class CS_SetPheseController : MonoBehaviour
 //-------------------------------------------------------------
 
     int debugCount = 0;
-
 
     // Start is called before the first frame update
     void Start()
