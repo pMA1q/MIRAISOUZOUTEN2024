@@ -9,7 +9,7 @@ using UnityEngine;
 using System;
 using System.Diagnostics;
 
-public class CS_SetPheseController : MonoBehaviour
+public class CS_BossPheseController : MonoBehaviour
 {
 
     [SerializeField]
