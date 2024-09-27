@@ -6,6 +6,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CS_Controller : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class CS_Controller : MonoBehaviour
         RUSH    //ラッシュフェーズ
     }
 
+    
     [SerializeField, Header("司令塔コントローラー")]
     List<GameObject> mCtrls = new List<GameObject>();
 
@@ -38,10 +40,7 @@ public class CS_Controller : MonoBehaviour
         //現在のフェーズの前のフェーズが違うなら次のフェーズに行く
         if(mNowPhese != mPrevPhese) { GoNextPhese(); }
 
-        //準備フェーズ司令塔スクリプトを取得
-        CS_SetPheseController spc = CS_SetPheseController.GetCtrl();
-        if(spc != null) { spc.PerformanceFinish(); }
-        else { Debug.LogError("準備フェーズ司令塔が見つからない!"); }
+       
     }
 
     //現在のフェーズ取得
@@ -62,7 +61,7 @@ public class CS_Controller : MonoBehaviour
     {
         mPrevPhese = mNowPhese;
         //司令塔生成
-        Instantiate(mCtrls[(int)mNowPhese], transform.position, transform.rotation);
+        GameObject smallCtrl = Instantiate(mCtrls[(int)mNowPhese], transform.position, transform.rotation);
     }
 
     //保留玉を増やす

@@ -20,16 +20,18 @@ public class CS_SetPheseController : MonoBehaviour
     private bool mPerformanceFinish = true;
 
 
+    private int mPrizesNum = 3;//入賞数
+
+    private CS_Controller mBigController;//司令塔大
 
  //-----------------------イベントハンドラ-----------------------
     public delegate void Performance(int _performance);
 
     //演出を流すトリガーイベント
     public static event Performance OnPlayPerformance;
-    //-------------------------------------------------------------
+ //-------------------------------------------------------------
 
 
-   
 
     int debugCount = 0;
 
@@ -43,6 +45,8 @@ public class CS_SetPheseController : MonoBehaviour
             mProbabilities.Add(mProbabilityStatus.performances[i].value);
             Debug.Log(mProbabilityStatus.performances[i].name + "の確率" + mProbabilities[i] + "%");
         }
+
+        mBigController = GameObject.Find("BigController").GetComponent<CS_Controller>();//司令塔（大）を取得
     }
 
     // Update is called once per frame
@@ -52,11 +56,26 @@ public class CS_SetPheseController : MonoBehaviour
         //演出が終わっていないなら終了
         if (!mPerformanceFinish) { return; }
 
-        //保留玉を使用
+        //残り入賞数が0？
+        if(mPrizesNum == 0)
+        {
+            //ミッション選択の処理を書く
+            return;
+        }
 
-        //演出抽選
-        int randomNumber = CS_LotteryFunction.LotPerformance(mProbabilities);
+        //保留玉数が0なら終了
+        if(mBigController.GetStock() == 0) { return; }
+
+        //保留玉を使用
+        //mBigController.UseStock();
+
+        mPrizesNum--;//入賞数を1減らす
+
+        //ミッション抽選
+        //int randomNumber = CS_LotteryFunction.LotPerformance(mProbabilities);
+        int randomNumber = CS_LotteryFunction.LotNormalInt(19);//0~19の番号抽選
         mPerformanceFinish = false;//演出終了フラグをfalse
+
         //演出開始トリガーをON
         OnPlayPerformance(randomNumber);
     }
@@ -98,7 +117,7 @@ public class CS_SetPheseController : MonoBehaviour
     {
         mPerformanceFinish = true;
     }
-
+    
     //登録されているイベントハンドラをすべて削除
     public static void RemoveAllHandlers()
     {
