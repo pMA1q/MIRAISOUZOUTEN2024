@@ -6,6 +6,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CS_Controller : MonoBehaviour
 {
@@ -13,9 +14,14 @@ public class CS_Controller : MonoBehaviour
     public enum PACHINKO_PHESE
     {
         SET,    //準備フェーズ
+        MISSION,//ミッションフェーズ
         BOSS,   //ボスフェーズ       
         RUSH    //ラッシュフェーズ
     }
+
+    
+    [SerializeField, Header("司令塔コントローラー")]
+    List<GameObject> mCtrls = new List<GameObject>();
 
     private PACHINKO_PHESE mNowPhese = PACHINKO_PHESE.SET;//現在のフェーズ
     private PACHINKO_PHESE mPrevPhese = PACHINKO_PHESE.SET;//前ののフェーズ
@@ -31,7 +37,10 @@ public class CS_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //現在のフェーズの前のフェーズが違うなら次のフェーズに行く
+        if(mNowPhese != mPrevPhese) { GoNextPhese(); }
+
+       
     }
 
     //現在のフェーズ取得
@@ -45,6 +54,14 @@ public class CS_Controller : MonoBehaviour
     {
         mPrevPhese = mNowPhese;
         mNowPhese = _nextPhese;
+    }
+
+    //次のフェーズへ行く
+    private void GoNextPhese()
+    {
+        mPrevPhese = mNowPhese;
+        //司令塔生成
+        GameObject smallCtrl = Instantiate(mCtrls[(int)mNowPhese], transform.position, transform.rotation);
     }
 
     //保留玉を増やす

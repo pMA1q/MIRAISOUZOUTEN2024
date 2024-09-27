@@ -11,10 +11,3 @@ public class CS_TestProbabilityStatus : ScriptableObject
     public List<ProbabilityEntry> performances; 
 }
 
-[System.Serializable]
-public class ProbabilityEntry
-{
-    public string name;  // カスタム名を保持する
-    public float value;   // 確率値（float）
-    public GameObject performancePrefab;
-}

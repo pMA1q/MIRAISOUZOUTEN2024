@@ -24,6 +24,14 @@ public class CS_LotteryFunction : MonoBehaviour
     }
 
   
+    //ノーマル抽選 int型の番号を返す。
+    //範囲：0~
+    public static int LotNormalInt(int _max)
+    {
+        return UnityEngine.Random.Range(0, _max);
+    }
+
+    //累積計算を使った確率抽選
     public static int LotPerformance(List<float> _probabilities)
     {
         //確率の合計を取得
