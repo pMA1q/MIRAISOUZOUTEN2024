@@ -14,6 +14,6 @@ public class CSO_SetPhaseStatus : ScriptableObject
 public class ProbabilityEntry
 {
     public string name;  // カスタム名を保持する
-    public float value=1;   // 確率値（float）
+    public float value;   // 確率値（float）
     public GameObject performancePrefab;
 }

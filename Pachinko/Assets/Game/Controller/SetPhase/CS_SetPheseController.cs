@@ -13,7 +13,7 @@ public class CS_SetPheseController : MonoBehaviour
 {
    
     [SerializeField]
-    CS_TestProbabilityStatus mProbabilityStatus;
+    CSO_SetPhaseStatus mProbabilityStatus;
     List<float> mProbabilities = new List<float>();
 
     //演出が終わったか否か
@@ -52,7 +52,8 @@ public class CS_SetPheseController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //CheckLottery();
+        CheckLottery();
+        return;
         //演出が終わっていないなら終了
         if (!mPerformanceFinish) { return; }
 

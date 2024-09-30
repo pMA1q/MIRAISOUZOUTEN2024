@@ -44,4 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57a9aaefb79f3244c9d3fb801b0df60a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mProbabilityStatus: {fileID: 11400000, guid: 778e61c89aae7d54b93344b10e1f7e83, type: 2}
+  mProbabilityStatus: {fileID: 11400000, guid: 9a750c60c23a64e4789c4fde6c6eda17, type: 2}
