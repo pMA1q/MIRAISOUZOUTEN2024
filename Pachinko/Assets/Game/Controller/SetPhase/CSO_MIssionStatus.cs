@@ -6,7 +6,9 @@ using UnityEngine;
 public class CSO_MIssionStatus : ScriptableObject
 {
     [Header("ミッション情報")]
-    public List<MissionTable> MissionStatus;
+    public List<MissionTable> infomation;
+
+    
 }
 
 
@@ -18,7 +20,6 @@ public class MissionTable
     public string name;  // カスタム名を保持する
     [Header("ミッション内容")]
     public List<Mission> mission;
-
 }
 
 [System.Serializable]
@@ -28,7 +29,10 @@ public class Mission
     public string name;
     [Header("進度")]
     public float progress;
-    
+
+    [Header("各ミッションのテクスチャマテリアル")]
+    public Material missionTextureMaterial;
+
     [Header("演出")]
     public GameObject performance;
 }
