@@ -9,18 +9,25 @@ using UnityEngine;
 using System;
 using System.Linq;  // LINQを使うために必要
 
+
 public class CS_SetPheseController : MonoBehaviour
 {
    
-    [SerializeField]
-    CS_TestProbabilityStatus mProbabilityStatus;
-    List<float> mProbabilities = new List<float>();
+    //[SerializeField]
+    //CSO_SetPhaseStatus mProbabilityStatus;
+    //List<float> mProbabilities = new List<float>();
+
+    [SerializeField,Header("ミッション情報")]
+    private CSO_MIssionStatus mMissionStatus;
+
+    [SerializeField, Header("ミッション選択プレハブ")]
+    private GameObject mMisstionSelect;
 
     //演出が終わったか否か
     private bool mPerformanceFinish = true;
 
 
-    private int mPrizesNum = 3;//入賞数
+    private int mPrizesNum = 0;//入賞数
 
     private CS_Controller mBigController;//司令塔大
 
@@ -40,44 +47,59 @@ public class CS_SetPheseController : MonoBehaviour
     void Start()
     {
         //パフォーマンスリストから確率をコピー
-        for (int i = 0; i < mProbabilityStatus.performances.Count; i++)
-        {
-            mProbabilities.Add(mProbabilityStatus.performances[i].value);
-            Debug.Log(mProbabilityStatus.performances[i].name + "の確率" + mProbabilities[i] + "%");
-        }
+        //for (int i = 0; i < mProbabilityStatus.performances.Count; i++)
+        //{
+        //    mProbabilities.Add(mProbabilityStatus.performances[i].value);
+        //    Debug.Log(mProbabilityStatus.performances[i].name + "の確率" + mProbabilities[i] + "%");
+        //}
+
+       
 
         mBigController = GameObject.Find("BigController").GetComponent<CS_Controller>();//司令塔（大）を取得
+        Instantiate(mMisstionSelect, mMisstionSelect.transform.position, mMisstionSelect.transform.rotation);
     }
 
     // Update is called once per frame
     void Update()
     {
+       
         //CheckLottery();
+        //return;
         //演出が終わっていないなら終了
         if (!mPerformanceFinish) { return; }
 
         //残り入賞数が0？
-        if(mPrizesNum == 0)
+        if(mPrizesNum == 3)
         {
+            mPrizesNum = 0;//テスト用
             //ミッション選択の処理を書く
             return;
         }
 
+
+
         //保留玉数が0なら終了
-        if(mBigController.GetStock() == 0) { return; }
+        //if(mBigController.GetStock() == 0) { return; }
+
+        // サブスクライブ確認のログ出力
+        if (OnPlayPerformance == null) { return; }
 
         //保留玉を使用
         //mBigController.UseStock();
 
-        mPrizesNum--;//入賞数を1減らす
-
         //ミッション抽選
-        //int randomNumber = CS_LotteryFunction.LotPerformance(mProbabilities);
-        int randomNumber = CS_LotteryFunction.LotNormalInt(19);//0~19の番号抽選
+        int randomNumber = CS_LotteryFunction.LotNormalInt(mMissionStatus.infomation[mPrizesNum].mission.Count -1);
         mPerformanceFinish = false;//演出終了フラグをfalse
 
-        //演出開始トリガーをON
-        OnPlayPerformance(randomNumber);
+        mPrizesNum++;//入賞数を増やす
+
+
+        if (OnPlayPerformance != null)
+        {
+            //演出開始トリガーをON
+            OnPlayPerformance(randomNumber);
+        }
+           
     }
 
 
@@ -86,14 +108,14 @@ public class CS_SetPheseController : MonoBehaviour
     {
         if (debugCount < 10000)
         {
-            int randomNumber = CS_LotteryFunction.LotPerformance(mProbabilities);
-            Debug.Log("ランダムに選ばれた演出: " + mProbabilityStatus.performances[randomNumber].name);
-            debugCount++;
+            //int randomNumber = CS_LotteryFunction.LotPerformance(mProbabilities);
+            //Debug.Log("ランダムに選ばれた演出: " + mProbabilityStatus.performances[randomNumber].name);
+            //debugCount++;
 
-            if (debugCount >= 10000)
-            {
-                Debug.Log("10000回終了");
-            }
+            //if (debugCount >= 10000)
+            //{
+            //    Debug.Log("10000回終了");
+            //}
         }
 
     }
@@ -134,4 +156,6 @@ public class CS_SetPheseController : MonoBehaviour
             }
         }
     }
+
+   
 }
