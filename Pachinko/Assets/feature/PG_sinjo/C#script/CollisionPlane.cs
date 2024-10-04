@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class CollisionPlane : MonoBehaviour
 {
@@ -8,7 +10,7 @@ public class CollisionPlane : MonoBehaviour
     Heso heso = null;  // ゲームの状態やデータを管理するカスタムクラス
 
     [SerializeField]
-    TextMesh[] texts = null;  // UIテキストオブジェクトの配列
+    TextMeshProUGUI[] texts = null;  // UIテキストオブジェクトの配列
 
     Coroutine coroutine = null;  // コルーチンの実行を管理する変数
 
@@ -20,22 +22,25 @@ public class CollisionPlane : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter(Collider other)
+    void Update() 
     {
-        if (other.gameObject.CompareTag("Pachinko Ball"))
+        if (coroutine == null && heso.stock.Count != 0) 
         {
-            Debug.Log("BallがPlaneを通過しました");
-            // コルーチンが実行されていない、かつheso.stock.Countが0ではない場合、コルーチンを開始する
-            if (coroutine == null && heso.stock.Count != 0)
-            {
-                coroutine = StartCoroutine(RealTex());
-            }
+            coroutine = StartCoroutine(RealTex());
         }
     }
+
 
     // 抽選を開始するメソッド
     IEnumerator RealTex()
     {
+        // stockの要素数が足りているか確認
+        if (heso.stock.Count == 0 || heso.stock[0].Length < 3)
+        {
+            Debug.LogError("stockに十分な要素がありません");
+            yield break;
+        }
+
         float time = 0.0f;
         value = heso.stock[0];
         heso.DisableStock();
@@ -64,17 +69,27 @@ public class CollisionPlane : MonoBehaviour
 
         yield return new WaitForSeconds(1.0f);
 
-        texts[0].text = heso.stock[0][0].ToString();
-        yield return new WaitForSeconds(0.5f);
-        texts[1].text = heso.stock[0][1].ToString();
-        yield return new WaitForSeconds(0.5f);
-        texts[2].text = heso.stock[0][2].ToString();
+        // stockのサイズを再度確認してから値を表示
+        if (heso.stock.Count > 0 && heso.stock[0].Length >= 3)
+        {
+            texts[0].text = heso.stock[0][0].ToString();
+            yield return new WaitForSeconds(0.5f);
+            texts[1].text = heso.stock[0][1].ToString();
+            yield return new WaitForSeconds(0.5f);
+            texts[2].text = heso.stock[0][2].ToString();
+        }
+        else
+        {
+            Debug.LogError("stockに十分なデータがありません");
+        }
 
         yield return new WaitForSeconds(2.0f);
 
         coroutine = null;
+        heso.stock.RemoveAt(0);
         yield return null;
     }
+
 
 }
 

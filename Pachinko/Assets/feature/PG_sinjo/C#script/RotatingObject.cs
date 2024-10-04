@@ -26,7 +26,7 @@ public class RotatingObject : MonoBehaviour
             Vector3 impactPoint = collision.contacts[0].point;
             Vector3 direction = transform.position - impactPoint; // 衝突点からオブジェクト中心へのベクトル
             rb.AddTorque(direction * 100f); // 回転力を加える
-            Debug.Log("風車衝突");
+            //Debug.Log("風車衝突");
         }
     }
 }
