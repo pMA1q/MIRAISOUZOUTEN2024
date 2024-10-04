@@ -71,6 +71,7 @@ public class CS_SetPheseController : MonoBehaviour
         //残り入賞数が0？
         if(mPrizesNum == 3)
         {
+            //
             mPrizesNum = 0;//テスト用
             //ミッション選択の処理を書く
             return;
