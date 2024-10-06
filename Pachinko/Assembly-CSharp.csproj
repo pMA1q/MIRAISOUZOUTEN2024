@@ -71,6 +71,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\Game\Controller\SetPhase\CS_SetPheseController.cs" />
+    <Compile Include="Assets\Game\Core\CS_DrawPattern.cs" />
     <Compile Include="Assets\Practice\CS_TestProbabilityStatus.cs" />
     <Compile Include="Assets\Bokudayo\Script\ChangeColor.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
@@ -102,7 +103,6 @@
     <Compile Include="Assets\feature\PG_sinjo\C#script\CS_SphereSpawn.cs" />
     <Compile Include="Assets\feature\PG_sinjo\C#script\ChangeText.cs" />
     <Compile Include="Assets\Bokudayo\Script\ExplosionSample.cs" />
-    <Compile Include="Assets\Game\Controller\CS_ProbabilityEntryDrawer.cs" />
     <Compile Include="Assets\Game\Controller\SetPhase\CSO_MIssionStatus.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
