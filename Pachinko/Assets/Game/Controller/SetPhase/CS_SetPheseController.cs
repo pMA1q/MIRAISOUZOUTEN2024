@@ -18,7 +18,7 @@ public class CS_SetPheseController : MonoBehaviour
     //List<float> mProbabilities = new List<float>();
 
     [SerializeField,Header("ミッション情報")]
-    private CSO_MIssionStatus mMissionStatus;
+    private CSO_SetPhaseTable mMissionStatus;
 
     [SerializeField, Header("ミッション選択プレハブ")]
     private GameObject mMisstionSelect;
@@ -62,31 +62,33 @@ public class CS_SetPheseController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+
         //CheckLottery();
-        //return;
-        //演出が終わっていないなら終了
-        if (!mPerformanceFinish) { return; }
+      
+        //変動終了フラグを取得
+        CS_Controller ctrl = GameObject.Find("BigController").GetComponent<CS_Controller>();
+
+        //次の変動が開始できるか
+        bool variationStart = ctrl.CanVariationStart();
+        if (!variationStart) { return; }
+
 
         //残り入賞数が0？
         if(mPrizesNum == 3)
         {
-            //
             mPrizesNum = 0;//テスト用
             //ミッション選択の処理を書く
             return;
         }
 
-
-
-        //保留玉数が0なら終了
-        //if(mBigController.GetStock() == 0) { return; }
-
         // サブスクライブ確認のログ出力
         if (OnPlayPerformance == null) { return; }
 
+        //保留玉数が0なら終了
+        if(mBigController.GetStock() == 0) { return; }
+
         //保留玉を使用
-        //mBigController.UseStock();
+        mBigController.UseStock();
 
         //ミッション抽選
         int randomNumber = CS_LotteryFunction.LotNormalInt(mMissionStatus.infomation[mPrizesNum].mission.Count -1);

@@ -9,7 +9,7 @@ using UnityEngine;
 public class CS_LotMission: MonoBehaviour
 {
     [SerializeField, Header("ミッションテーブル")]
-    private CSO_MIssionStatus mMissionStatus;
+    private CSO_SetPhaseTable mMissionStatus;
 
     [SerializeField, Header("ステータスミッション表示オブジェクト")]
     private MeshRenderer mStatusMission;
@@ -23,10 +23,11 @@ public class CS_LotMission: MonoBehaviour
     private List<MeshRenderer> mTextureMaterials = new List<MeshRenderer>();
 
     private int mNowMissionSelect = 0;//抽選決定するミッション番号(0~2)
+
+    Coroutine coroutine = null;  // コルーチンの実行を管理する変数
     // Start is called before the first frame update
     void Start()
     {
-      
         mTextureMaterials.Add(mStatusMission);
         mTextureMaterials.Add(mEventMission);
         mTextureMaterials.Add(mItemMission);
@@ -40,10 +41,17 @@ public class CS_LotMission: MonoBehaviour
         
     }
 
+    //ミッション決定
     private void DecisionMission(int _num)
     {
-        
-        
+        if(coroutine == null) { coroutine = StartCoroutine(ChangeMaterial(_num)); }
+    }
+
+    //マテリアルを変更
+    private IEnumerator ChangeMaterial(int _num)
+    {
+        yield return new WaitForSeconds(2f);
+
         Material[] materials = mTextureMaterials[mNowMissionSelect].materials;//materialsを取得
         //0番目をミッション情報に設定したマテリアルに変更
         materials[0] = mMissionStatus.infomation[mNowMissionSelect].mission[_num].missionTextureMaterial;
@@ -60,6 +68,9 @@ public class CS_LotMission: MonoBehaviour
 
         //演出終了用スクリプトを生成
         CS_SetPerformanceFinish spcFinish = this.gameObject.AddComponent<CS_SetPerformanceFinish>();
-        spcFinish.Timer = 3f;//終了までの時間を3秒に変更
+        spcFinish.Timer = 2f;//終了までの時間を1秒に変更
+
+        coroutine = null;
+        yield return null;
     }
 }
