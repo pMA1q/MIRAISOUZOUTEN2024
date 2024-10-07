@@ -64,12 +64,12 @@ public class CS_DrawPattern : MonoBehaviour
         if (mHeso.stock.Count > 0 && mHeso.stock[0].Length >= 3)
         {
             //0.2•b‚²‚Æ‚É¶A‰EA’†‚Ì‡”Ô‚Å~‚ß‚é
-            mTexts[0].text = mHeso.stock[0][0].ToString();
+            DecisionNumber(mTexts[0], mHeso.stock[0][0]);
             yield return StartCoroutine(UpdateWithIncNumber(0.2f, 1,3)); // 0.2•bŠÔAIncNumber‚ğ‰ñ‚·
-            mTexts[1].text = mHeso.stock[0][2].ToString();
+            DecisionNumber(mTexts[1], mHeso.stock[0][2]);
             yield return StartCoroutine(UpdateWithIncNumber(0.2f, 2, 3));
-            mTexts[2].text = mHeso.stock[0][1].ToString();
-            
+            DecisionNumber(mTexts[2], mHeso.stock[0][1]);
+           
         }
         else
         {
@@ -89,6 +89,20 @@ public class CS_DrawPattern : MonoBehaviour
         yield return null;
     }
 
+    //}•¿’â~‚³‚¹AF‚Æ}•¿‚ğŒˆ‚ß‚é
+    private void DecisionNumber(TextMeshProUGUI _textGUI, int _stock)
+    {
+        _textGUI.text = _stock.ToString();
+        if (_stock % 2 == 0)
+        {
+            _textGUI.color = Color.blue;
+        }
+        else
+        {
+            _textGUI.color = Color.red;
+        }
+    }
+
     //}•¿‚Ì”š‚ğƒCƒ“ƒNƒŠƒƒ“ƒg
     private void IncNumber(int _val)
     {
@@ -96,8 +110,17 @@ public class CS_DrawPattern : MonoBehaviour
        
         mValue[_val] %= 10;
         
+       
         mTexts[_val].text = mValue[_val].ToString();
- 
+
+        if (mValue[_val] % 2 == 0)
+        {
+            mTexts[_val].color = Color.blue;
+        }
+        else
+        {
+            mTexts[_val].color = Color.red;
+        }
     }
 
     //}•¿‚ª‡”Ô‚É~‚Ü‚é‚Æ‚«‚Ì~‚Ü‚Á‚½}•¿ˆÈŠO‚Í‚Ü‚¾ƒCƒ“ƒNƒŠƒƒ“ƒg‚µ‘±‚¯‚é

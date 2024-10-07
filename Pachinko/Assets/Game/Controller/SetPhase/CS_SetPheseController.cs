@@ -18,7 +18,7 @@ public class CS_SetPheseController : MonoBehaviour
     //List<float> mProbabilities = new List<float>();
 
     [SerializeField,Header("ミッション情報")]
-    private CSO_MIssionStatus mMissionStatus;
+    private CSO_SetPhaseTable mMissionStatus;
 
     [SerializeField, Header("ミッション選択プレハブ")]
     private GameObject mMisstionSelect;

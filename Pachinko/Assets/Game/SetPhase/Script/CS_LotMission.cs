@@ -9,7 +9,7 @@ using UnityEngine;
 public class CS_LotMission: MonoBehaviour
 {
     [SerializeField, Header("ミッションテーブル")]
-    private CSO_MIssionStatus mMissionStatus;
+    private CSO_SetPhaseTable mMissionStatus;
 
     [SerializeField, Header("ステータスミッション表示オブジェクト")]
     private MeshRenderer mStatusMission;

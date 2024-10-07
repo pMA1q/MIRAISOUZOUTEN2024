@@ -59,6 +59,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
     <Compile Include="Assets\feature\PG_sinjo\C#script\CollisionPlane.cs" />
+    <Compile Include="Assets\Game\Controller\MissionPhase\CSO_MissionPhaseTable.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\feature\PG_sinjo\C#script\CS_Lottery.cs" />
@@ -103,7 +104,7 @@
     <Compile Include="Assets\feature\PG_sinjo\C#script\CS_SphereSpawn.cs" />
     <Compile Include="Assets\feature\PG_sinjo\C#script\ChangeText.cs" />
     <Compile Include="Assets\Bokudayo\Script\ExplosionSample.cs" />
-    <Compile Include="Assets\Game\Controller\SetPhase\CSO_MIssionStatus.cs" />
+    <Compile Include="Assets\Game\Controller\SetPhase\CSO_SetPhaseTable.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
