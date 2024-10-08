@@ -8,11 +8,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;  // LINQを使うために必要
+using UnityEngine.UI;
+using Unity.VisualScripting;
 
 
 public class CS_SetPheseController : MonoBehaviour
 {
-   
+    public GameObject[] cubes; // 色を移動させるCubeの配列
+    public Button transferButton; // ボタン
+
     //[SerializeField]
     //CSO_SetPhaseStatus mProbabilityStatus;
     //List<float> mProbabilities = new List<float>();
@@ -57,6 +61,9 @@ public class CS_SetPheseController : MonoBehaviour
 
         mBigController = GameObject.Find("BigController").GetComponent<CS_Controller>();//司令塔（大）を取得
         Instantiate(mMisstionSelect, mMisstionSelect.transform.position, mMisstionSelect.transform.rotation);
+
+        // ボタンが押されたときのイベントを設定
+        transferButton.onClick.AddListener(MoveColor);
     }
 
     // Update is called once per frame
@@ -71,11 +78,13 @@ public class CS_SetPheseController : MonoBehaviour
         //残り入賞数が0？
         if(mPrizesNum == 3)
         {
+            //カーソル移動する処理
+
+
             mPrizesNum = 0;//テスト用
             //ミッション選択の処理を書く
             return;
         }
-
 
 
         //保留玉数が0なら終了
@@ -157,5 +166,22 @@ public class CS_SetPheseController : MonoBehaviour
         }
     }
 
-   
+    //オブジェクトの色を移す
+    private void MoveColor()
+    {
+        // 色を隣のオブジェクトに移動させる
+        for (int i = 0; i < cubes.Length; i++)
+        {
+            Color currentColor = cubes[i].GetComponent<Renderer>().material.color;
+
+            if (i < cubes.Length - 1) // 最後のCubeの場合は何もしない
+            {
+                cubes[i + 1].GetComponent<Renderer>().material.color = currentColor;
+            }
+
+            // 最後のCubeの色をクリアする場合は以下の行を有効にします
+            // cubes[i].GetComponent<Renderer>().material.color = Color.white;
+        }
+    }
+
 }
