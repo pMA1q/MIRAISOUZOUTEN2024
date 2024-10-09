@@ -20,11 +20,24 @@ public class CS_LotMission: MonoBehaviour
     [SerializeField, Header("アイテムミッション表示オブジェクト")]
     private MeshRenderer mItemMission;
 
+    [SerializeField, Header("ミッション選択オブジェクト")]
+    private GameObject mSetPhaseSelect;
+
+
     private List<MeshRenderer> mTextureMaterials = new List<MeshRenderer>();
 
     private int mNowMissionSelect = 0;//抽選決定するミッション番号(0~2)
 
     Coroutine coroutine = null;  // コルーチンの実行を管理する変数
+
+    private bool mSelectActive = false;
+
+    private void Awake()
+    {
+        mSetPhaseSelect.SetActive(false);
+       
+        
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -33,12 +46,19 @@ public class CS_LotMission: MonoBehaviour
         mTextureMaterials.Add(mItemMission);
 
         CS_SetPheseController.OnPlayPerformance += DecisionMission;
+        Debug.Log("MissionSelect" + this.name);
     }
 
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("mSelectActive" + mSelectActive+ "name"+ this.gameObject.name);
+        bool active = mSetPhaseSelect.activeSelf;
         
+        if (active == false && mSelectActive)
+        {
+            mSetPhaseSelect.SetActive(true);
+        }
     }
 
     //ミッション決定
@@ -72,5 +92,13 @@ public class CS_LotMission: MonoBehaviour
 
         coroutine = null;
         yield return null;
+    }
+
+    //プレイヤーがミッションを選択する状態にする
+    public void PlaySelectMode()
+    {
+        //選択オブジェクトをtrue
+        mSelectActive = true;
+        Debug.Log("mSelectActiveあああ" + mSelectActive + "name" + this.gameObject.name);
     }
 }

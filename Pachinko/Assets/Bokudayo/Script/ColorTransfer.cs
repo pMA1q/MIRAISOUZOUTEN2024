@@ -15,16 +15,16 @@ public class ColorTransfer : MonoBehaviour
     private void MoveColor()
     {
         // 最後のCubeの色を保存
-        Color lastColor = cubes[cubes.Length - 1].GetComponent<Renderer>().material.color;
+        Color lastColor = cubes[0].GetComponent<Renderer>().material.color;
 
         // 色を隣のオブジェクトに移動させる
-        for (int i = cubes.Length - 1; i > 0; i--)
+        for (int i = 0; i < cubes.Length - 1; i++)
         {
-            Color currentColor = cubes[i - 1].GetComponent<Renderer>().material.color;
+            Color currentColor = cubes[i + 1].GetComponent<Renderer>().material.color;
             cubes[i].GetComponent<Renderer>().material.color = currentColor;
         }
 
         // 最初のCubeの色を最後のCubeの色に設定
-        cubes[0].GetComponent<Renderer>().material.color = lastColor;
+        cubes[cubes.Length - 1].GetComponent<Renderer>().material.color = lastColor;
     }
 }
