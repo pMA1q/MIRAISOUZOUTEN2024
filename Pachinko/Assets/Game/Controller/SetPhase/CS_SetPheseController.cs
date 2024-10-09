@@ -14,31 +14,24 @@ using Unity.VisualScripting;
 
 public class CS_SetPheseController : MonoBehaviour
 {
-    public GameObject[] cubes; // �F��ړ�������Cube�̔z��
-    public Button transferButton; // �{�^��
-
     //[SerializeField]
     //CSO_SetPhaseStatus mProbabilityStatus;
     //List<float> mProbabilities = new List<float>();
 
-    [SerializeField,Header("�~�b�V�������")]
+    [SerializeField,Header("準備フェーズのテーブル")]
     private CSO_SetPhaseTable mMissionStatus;
 
-    [SerializeField, Header("�~�b�V�����I��v���n�u")]
+    [SerializeField, Header("ミッションselectのプレハブ")]
     private GameObject mMisstionSelect;
 
-    //���o���I��������ۂ�
-    private bool mPerformanceFinish = true;
+    private int mPrizesNum = 0;//入賞数
 
+    private CS_Controller mBigController;//司令塔(大)
 
-    private int mPrizesNum = 0;//���ܐ�
-
-    private CS_Controller mBigController;//�i�ߓ���
-
- //-----------------------�C�x���g�n���h��-----------------------
+ //-----------------------イベントハンドラ-----------------------
     public delegate void Performance(int _performance);
 
-    //���o�𗬂��g���K�[�C�x���g
+    //登録時に使用
     public static event Performance OnPlayPerformance;
  //-------------------------------------------------------------
 
@@ -59,11 +52,12 @@ public class CS_SetPheseController : MonoBehaviour
 
        
 
-        mBigController = GameObject.Find("BigController").GetComponent<CS_Controller>();//�i�ߓ��i��j��擾
-        Instantiate(mMisstionSelect, mMisstionSelect.transform.position, mMisstionSelect.transform.rotation);
+        mBigController = GameObject.Find("BigController").GetComponent<CS_Controller>();//司令塔大を取得
+                                                                                        //ミッション選択オブジェクトを生成
+        GameObject instance = Instantiate(mMisstionSelect, mMisstionSelect.transform.position, mMisstionSelect.transform.rotation);
+        instance.name = mMisstionSelect.name; // (Clone)が付かないように名前をオリジナルの名前に戻す
 
-        // �{�^���������ꂽ�Ƃ��̃C�x���g��ݒ�
-        transferButton.onClick.AddListener(MoveColor);
+        Debug.Log("mMisstionSelect" + mMisstionSelect.name);
     }
 
     // Update is called once per frame
@@ -72,44 +66,41 @@ public class CS_SetPheseController : MonoBehaviour
 
         //CheckLottery();
       
-        //�ϓ��I���t���O��擾
-        CS_Controller ctrl = GameObject.Find("BigController").GetComponent<CS_Controller>();
 
-        //���̕ϓ����J�n�ł��邩
-        bool variationStart = ctrl.CanVariationStart();
-        if (!variationStart) { return; }
+        //変動できるかを取得
+        bool variationStart = mBigController.CanVariationStart();
+        if (!variationStart) { return; }//falseなら終了
 
 
-        //�c����ܐ���0�H
+        //入賞数が3？
         if(mPrizesNum == 3)
         {
-            //�J�[�\���ړ����鏈��
-
-
-            mPrizesNum = 0;//�e�X�g�p
-            //�~�b�V�����I��̏��������
+            //別物を参照しているのでシーンからMissionSelectを見つけてサイド取得
+            mMisstionSelect = GameObject.Find("MissionSelect");
+            //プレイヤーがミッションを選択する状態を開始する
+            mMisstionSelect.GetComponent<CS_LotMission>().PlaySelectMode();
+            Destroy(this.gameObject);
             return;
         }
 
-        // �T�u�X�N���C�u�m�F�̃��O�o��
+        // イベントハンドラはnullなら終了
         if (OnPlayPerformance == null) { return; }
 
-        //�ۗ��ʐ���0�Ȃ�I��
+        //保留玉が無いなら終了
         if(mBigController.GetStock() == 0) { return; }
 
-        //�ۗ��ʂ�g�p
+        //保留玉使用（変動開始）
         mBigController.UseStock();
 
-        //�~�b�V�������I
+        //演出抽選
         int randomNumber = CS_LotteryFunction.LotNormalInt(mMissionStatus.infomation[mPrizesNum].mission.Count -1);
-        mPerformanceFinish = false;//���o�I���t���O��false
 
-        mPrizesNum++;//���ܐ��𑝂₷
+        mPrizesNum++;//入賞数加算
 
 
         if (OnPlayPerformance != null)
         {
-            //���o�J�n�g���K�[��ON
+            //イベントハンドラ実行y
             OnPlayPerformance(randomNumber);
         }
            
@@ -133,36 +124,15 @@ public class CS_SetPheseController : MonoBehaviour
 
     }
 
-    //�V�[����ɂ���I�u�W�F�N�g����CS_SetPheseController������ĕԂ�
-    public static CS_SetPheseController GetCtrl()
-    {
-        //�V�[����̑S�Ă�GameObject��擾���āA���O��mPrefabName��܂ރI�u�W�F�N�g�����
-        GameObject targetObject = FindObjectsOfType<GameObject>()
-            .FirstOrDefault(obj => obj.name.Contains("SetPhaseCtrl"));
-        if (targetObject != null)
-        {
-            Debug.Log("�����t�F�[�Y�i�ߓ�����������");
-            return targetObject.GetComponent<CS_SetPheseController>();
-        }
-        return null;
-    }
-
-    //���o�I���֐�
-    public void PerformanceFinish()
-    {
-        mPerformanceFinish = true;
-    }
-    
-    //�o�^����Ă���C�x���g�n���h������ׂč폜
+   
     public static void RemoveAllHandlers()
     {
-        // OnPlayPerformance �ɉ�������̃n���h�����o�^����Ă���ꍇ
+        // OnPlayPerformanceに登録されている関数を消す
         if (OnPlayPerformance != null)
         {
-            // OnPlayPerformance �ɓo�^����Ă���S�Ẵn���h����擾
+            //登録されているものを取得
             Delegate[] handlers = OnPlayPerformance.GetInvocationList();
 
-            // ���ׂẴn���h������
             foreach (Delegate handler in handlers)
             {
                 OnPlayPerformance -= (Performance)handler;
@@ -170,22 +140,6 @@ public class CS_SetPheseController : MonoBehaviour
         }
     }
 
-    //�I�u�W�F�N�g�̐F��ڂ�
-    private void MoveColor()
-    {
-        // �F��ׂ̃I�u�W�F�N�g�Ɉړ�������
-        for (int i = 0; i < cubes.Length; i++)
-        {
-            Color currentColor = cubes[i].GetComponent<Renderer>().material.color;
-
-            if (i < cubes.Length - 1) // �Ō��Cube�̏ꍇ�͉�����Ȃ�
-            {
-                cubes[i + 1].GetComponent<Renderer>().material.color = currentColor;
-            }
-
-            // �Ō��Cube�̐F��N���A����ꍇ�͈ȉ��̍s��L���ɂ��܂�
-            // cubes[i].GetComponent<Renderer>().material.color = Color.white;
-        }
-    }
+    
 
 }
