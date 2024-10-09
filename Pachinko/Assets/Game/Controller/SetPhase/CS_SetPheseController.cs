@@ -1,40 +1,44 @@
 //---------------------------------
-//€”õƒtƒF[ƒYi—ß“ƒ
-//’S“–ÒF’†“‡
+//ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½Fï¿½[ï¿½Yï¿½iï¿½ß“ï¿½
+//ï¿½Sï¿½ï¿½ï¿½ÒFï¿½ï¿½ï¿½ï¿½
 //---------------------------------
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Linq;  // LINQ‚ğg‚¤‚½‚ß‚É•K—v
+using System.Linq;  // LINQï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ß‚É•Kï¿½v
+using UnityEngine.UI;
+using Unity.VisualScripting;
 
 
 public class CS_SetPheseController : MonoBehaviour
 {
-   
+    public GameObject[] cubes; // ï¿½Fï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cubeï¿½Ì”zï¿½ï¿½
+    public Button transferButton; // ï¿½{ï¿½^ï¿½ï¿½
+
     //[SerializeField]
     //CSO_SetPhaseStatus mProbabilityStatus;
     //List<float> mProbabilities = new List<float>();
 
-    [SerializeField,Header("ƒ~ƒbƒVƒ‡ƒ“î•ñ")]
+    [SerializeField,Header("ï¿½~ï¿½bï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     private CSO_SetPhaseTable mMissionStatus;
 
-    [SerializeField, Header("ƒ~ƒbƒVƒ‡ƒ“‘I‘ğƒvƒŒƒnƒu")]
+    [SerializeField, Header("ï¿½~ï¿½bï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½vï¿½ï¿½ï¿½nï¿½u")]
     private GameObject mMisstionSelect;
 
-    //‰‰o‚ªI‚í‚Á‚½‚©”Û‚©
+    //ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û‚ï¿½
     private bool mPerformanceFinish = true;
 
 
-    private int mPrizesNum = 0;//“üÜ”
+    private int mPrizesNum = 0;//ï¿½ï¿½ï¿½Üï¿½
 
-    private CS_Controller mBigController;//i—ß“ƒ‘å
+    private CS_Controller mBigController;//ï¿½iï¿½ß“ï¿½ï¿½ï¿½
 
- //-----------------------ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰-----------------------
+ //-----------------------ï¿½Cï¿½xï¿½ï¿½ï¿½gï¿½nï¿½ï¿½ï¿½hï¿½ï¿½-----------------------
     public delegate void Performance(int _performance);
 
-    //‰‰o‚ğ—¬‚·ƒgƒŠƒK[ƒCƒxƒ“ƒg
+    //ï¿½ï¿½ï¿½oï¿½ğ—¬‚ï¿½ï¿½gï¿½ï¿½ï¿½Kï¿½[ï¿½Cï¿½xï¿½ï¿½ï¿½g
     public static event Performance OnPlayPerformance;
  //-------------------------------------------------------------
 
@@ -46,17 +50,20 @@ public class CS_SetPheseController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //ƒpƒtƒH[ƒ}ƒ“ƒXƒŠƒXƒg‚©‚çŠm—¦‚ğƒRƒs[
+        //ï¿½pï¿½tï¿½Hï¿½[ï¿½}ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½mï¿½ï¿½ï¿½ï¿½Rï¿½sï¿½[
         //for (int i = 0; i < mProbabilityStatus.performances.Count; i++)
         //{
         //    mProbabilities.Add(mProbabilityStatus.performances[i].value);
-        //    Debug.Log(mProbabilityStatus.performances[i].name + "‚ÌŠm—¦" + mProbabilities[i] + "%");
+        //    Debug.Log(mProbabilityStatus.performances[i].name + "ï¿½ÌŠmï¿½ï¿½" + mProbabilities[i] + "%");
         //}
 
        
 
-        mBigController = GameObject.Find("BigController").GetComponent<CS_Controller>();//i—ß“ƒi‘åj‚ğæ“¾
+        mBigController = GameObject.Find("BigController").GetComponent<CS_Controller>();//ï¿½iï¿½ß“ï¿½ï¿½iï¿½ï¿½jï¿½ï¿½æ“¾
         Instantiate(mMisstionSelect, mMisstionSelect.transform.position, mMisstionSelect.transform.rotation);
+
+        // ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½Æ‚ï¿½ï¿½ÌƒCï¿½xï¿½ï¿½ï¿½gï¿½ï¿½İ’ï¿½
+        transferButton.onClick.AddListener(MoveColor);
     }
 
     // Update is called once per frame
@@ -65,41 +72,44 @@ public class CS_SetPheseController : MonoBehaviour
 
         //CheckLottery();
       
-        //•Ï“®I—¹ƒtƒ‰ƒO‚ğæ“¾
+        //ï¿½Ï“ï¿½ï¿½Iï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½æ“¾
         CS_Controller ctrl = GameObject.Find("BigController").GetComponent<CS_Controller>();
 
-        //Ÿ‚Ì•Ï“®‚ªŠJn‚Å‚«‚é‚©
+        //ï¿½ï¿½ï¿½Ì•Ï“ï¿½ï¿½ï¿½ï¿½Jï¿½nï¿½Å‚ï¿½ï¿½é‚©
         bool variationStart = ctrl.CanVariationStart();
         if (!variationStart) { return; }
 
 
-        //c‚è“üÜ”‚ª0H
+        //ï¿½cï¿½ï¿½ï¿½ï¿½Üï¿½ï¿½ï¿½0ï¿½H
         if(mPrizesNum == 3)
         {
-            mPrizesNum = 0;//ƒeƒXƒg—p
-            //ƒ~ƒbƒVƒ‡ƒ“‘I‘ğ‚Ìˆ—‚ğ‘‚­
+            //ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½éˆï¿½ï¿½
+
+
+            mPrizesNum = 0;//ï¿½eï¿½Xï¿½gï¿½p
+            //ï¿½~ï¿½bï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             return;
         }
 
-        // ƒTƒuƒXƒNƒ‰ƒCƒuŠm”F‚ÌƒƒOo—Í
+        // ï¿½Tï¿½uï¿½Xï¿½Nï¿½ï¿½ï¿½Cï¿½uï¿½mï¿½Fï¿½Ìƒï¿½ï¿½Oï¿½oï¿½ï¿½
         if (OnPlayPerformance == null) { return; }
 
-        //•Û—¯‹Ê”‚ª0‚È‚çI—¹
+        //ï¿½Û—ï¿½ï¿½Êï¿½ï¿½ï¿½0ï¿½È‚ï¿½Iï¿½ï¿½
         if(mBigController.GetStock() == 0) { return; }
 
-        //•Û—¯‹Ê‚ğg—p
+        //ï¿½Û—ï¿½ï¿½Ê‚ï¿½gï¿½p
         mBigController.UseStock();
 
-        //ƒ~ƒbƒVƒ‡ƒ“’Š‘I
+        //ï¿½~ï¿½bï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½I
         int randomNumber = CS_LotteryFunction.LotNormalInt(mMissionStatus.infomation[mPrizesNum].mission.Count -1);
-        mPerformanceFinish = false;//‰‰oI—¹ƒtƒ‰ƒO‚ğfalse
+        mPerformanceFinish = false;//ï¿½ï¿½ï¿½oï¿½Iï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½false
 
-        mPrizesNum++;//“üÜ”‚ğ‘‚â‚·
+        mPrizesNum++;//ï¿½ï¿½ï¿½Üï¿½ï¿½ğ‘‚â‚·
 
 
         if (OnPlayPerformance != null)
         {
-            //‰‰oŠJnƒgƒŠƒK[‚ğON
+            //ï¿½ï¿½ï¿½oï¿½Jï¿½nï¿½gï¿½ï¿½ï¿½Kï¿½[ï¿½ï¿½ON
             OnPlayPerformance(randomNumber);
         }
            
@@ -112,47 +122,47 @@ public class CS_SetPheseController : MonoBehaviour
         if (debugCount < 10000)
         {
             //int randomNumber = CS_LotteryFunction.LotPerformance(mProbabilities);
-            //Debug.Log("ƒ‰ƒ“ƒ_ƒ€‚É‘I‚Î‚ê‚½‰‰o: " + mProbabilityStatus.performances[randomNumber].name);
+            //Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½É‘Iï¿½Î‚ê‚½ï¿½ï¿½ï¿½o: " + mProbabilityStatus.performances[randomNumber].name);
             //debugCount++;
 
             //if (debugCount >= 10000)
             //{
-            //    Debug.Log("10000‰ñI—¹");
+            //    Debug.Log("10000ï¿½ï¿½Iï¿½ï¿½");
             //}
         }
 
     }
 
-    //ƒV[ƒ““à‚É‚ ‚éƒIƒuƒWƒFƒNƒg‚©‚çCS_SetPheseController‚ğŒ©‚Â‚¯‚Ä•Ô‚·
+    //ï¿½Vï¿½[ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½CS_SetPheseControllerï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½Ä•Ô‚ï¿½
     public static CS_SetPheseController GetCtrl()
     {
-        //ƒV[ƒ““à‚Ì‘S‚Ä‚ÌGameObject‚ğæ“¾‚µ‚ÄA–¼‘O‚ÉmPrefabName‚ğŠÜ‚ŞƒIƒuƒWƒFƒNƒg‚ğŒŸõ
+        //ï¿½Vï¿½[ï¿½ï¿½ï¿½ï¿½Ì‘Sï¿½Ä‚ï¿½GameObjectï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ÄAï¿½ï¿½ï¿½Oï¿½ï¿½mPrefabNameï¿½ï¿½Ü‚ŞƒIï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½
         GameObject targetObject = FindObjectsOfType<GameObject>()
             .FirstOrDefault(obj => obj.name.Contains("SetPhaseCtrl"));
         if (targetObject != null)
         {
-            Debug.Log("€”õƒtƒF[ƒYi—ß“ƒ‚ªŒ©‚Â‚©‚Á‚½");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½Fï¿½[ï¿½Yï¿½iï¿½ß“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½ï¿½ï¿½");
             return targetObject.GetComponent<CS_SetPheseController>();
         }
         return null;
     }
 
-    //‰‰oI—¹ŠÖ”
+    //ï¿½ï¿½ï¿½oï¿½Iï¿½ï¿½ï¿½Öï¿½
     public void PerformanceFinish()
     {
         mPerformanceFinish = true;
     }
     
-    //“o˜^‚³‚ê‚Ä‚¢‚éƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰‚ğ‚·‚×‚Äíœ
+    //ï¿½oï¿½^ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Cï¿½xï¿½ï¿½ï¿½gï¿½nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚Äíœ
     public static void RemoveAllHandlers()
     {
-        // OnPlayPerformance ‚É‰½‚©‚µ‚ç‚Ìƒnƒ“ƒhƒ‰‚ª“o˜^‚³‚ê‚Ä‚¢‚éê‡
+        // OnPlayPerformance ï¿½É‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒnï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½oï¿½^ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡
         if (OnPlayPerformance != null)
         {
-            // OnPlayPerformance ‚É“o˜^‚³‚ê‚Ä‚¢‚é‘S‚Ä‚Ìƒnƒ“ƒhƒ‰‚ğæ“¾
+            // OnPlayPerformance ï¿½É“oï¿½^ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Sï¿½Ä‚Ìƒnï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½æ“¾
             Delegate[] handlers = OnPlayPerformance.GetInvocationList();
 
-            // ‚·‚×‚Ä‚Ìƒnƒ“ƒhƒ‰‚ğ‰ğœ
+            // ï¿½ï¿½ï¿½×‚Ä‚Ìƒnï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             foreach (Delegate handler in handlers)
             {
                 OnPlayPerformance -= (Performance)handler;
@@ -160,5 +170,22 @@ public class CS_SetPheseController : MonoBehaviour
         }
     }
 
-   
+    //ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ÌFï¿½ï¿½Ú‚ï¿½
+    private void MoveColor()
+    {
+        // ï¿½Fï¿½ï¿½×‚ÌƒIï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ÉˆÚ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        for (int i = 0; i < cubes.Length; i++)
+        {
+            Color currentColor = cubes[i].GetComponent<Renderer>().material.color;
+
+            if (i < cubes.Length - 1) // ï¿½ÅŒï¿½ï¿½Cubeï¿½Ìê‡ï¿½Í‰ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
+            {
+                cubes[i + 1].GetComponent<Renderer>().material.color = currentColor;
+            }
+
+            // ï¿½ÅŒï¿½ï¿½Cubeï¿½ÌFï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍˆÈ‰ï¿½ï¿½Ìsï¿½ï¿½Lï¿½ï¿½ï¿½É‚ï¿½ï¿½Ü‚ï¿½
+            // cubes[i].GetComponent<Renderer>().material.color = Color.white;
+        }
+    }
+
 }
